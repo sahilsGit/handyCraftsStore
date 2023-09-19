@@ -6,6 +6,10 @@ import logger from 'morgan';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import ordersRouter from './routes/orders.js';
+import authRouter from './routes/auth.js';
+import productsRouter from './routes/products.js';
+
 import { fileURLToPath } from 'url'
 
 
@@ -25,7 +29,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/products', productsRouter);
+app.use('/api/orders', ordersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

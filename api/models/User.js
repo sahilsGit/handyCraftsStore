@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
   username: {
     type: String,
     required: true,
@@ -19,12 +21,17 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: String,
   bio: String,
-  location: String,
-  role: {
+  location: {
     type: String,
-    enum: ['artisan', 'buyer'], // Define roles as 'artisan' or 'buyer'
-    required: true,
+    default: null
   },
+  role: [
+    {
+    type: String,
+    enum: ['artisan', 'buyer'] // Define roles as 'artisan' or 'buyer'
+    // ,default: 'buyer', // Set the default role to 'buyer'
+    },
+  ],
   products: [
     {
       type: mongoose.Schema.Types.ObjectId,

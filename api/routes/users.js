@@ -1,9 +1,26 @@
 import express from "express";
+import { 
+    updateUser, 
+    deleteUser, 
+    getUser
+} from "../controllers/userController.js";
+
+import { 
+    verifyUser
+} from "../utils/verifyToken.js";
+
+// Create a router for handling requests
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// UPDATE
+router.put("/:id", verifyUser, updateUser)
 
-export default router;
+// DELETE
+router.delete("/:id", verifyUser, deleteUser)
+
+// GET 
+router.get("/:id", verifyUser, getUser)
+
+
+export default router
+
