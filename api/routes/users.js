@@ -3,7 +3,7 @@ import {
     updateUser, 
     deleteUser, 
     getUser
-} from "../controllers/userController.js";
+} from "../controllers/usersController.js";
 
 import { 
     verifyUser
