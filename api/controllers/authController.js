@@ -2,15 +2,16 @@ import User from "../models/User.js";
 import bcrypt from 'bcryptjs'
 import { createError } from "../utils/error.js";
 import jwt from 'jsonwebtoken';
+import Cart from "../models/Cart.js";
 
 export const register = async (req, res, next) => {
     try {
 
-        // Hashing the password using bcryptjs
+        // Hash the password using bcryptjs
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt);
 
-        // Making a User by sending data collected and calling the schema function
+        // Make a User by sending data collected to the schema model
         const newUser = new User({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -20,7 +21,6 @@ export const register = async (req, res, next) => {
             role: ['buyer']
         });
 
-        // Optionally, you can set additional properties based on the request body
         if (req.body.profilePicture) {
             newUser.profilePicture = req.body.profilePicture;
         }
@@ -28,7 +28,12 @@ export const register = async (req, res, next) => {
             newUser.bio = req.body.bio;
         }
 
-        await newUser.save(); // Saving the User into our DB
+        // Create a new Cart document and associate it with the user
+        const newCart = new Cart({});
+        await newCart.save();
+        newUser.cart = newCart._id; // Set the user's cart reference
+
+        await newUser.save(); // Save the User into our DB
         res.status(201).send("User has been created");
         
     } catch(err) {
@@ -43,7 +48,7 @@ export const login = async (req, res, next) => {
             return next(createError(404, "User not found")); // Return error if no user found
         }
 
-        const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
+        const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password); 
 
         if (!isPasswordCorrect) {
             return next(createError(400, "Incorrect Username or Password!")); // Return error
@@ -51,8 +56,8 @@ export const login = async (req, res, next) => {
 
         const token = jwt.sign({ 
             "id": user._id, 
-            "role": user.role       // User Role
-        }, process.env.JWT); // Authorizing user using the secret key
+            "role": user.role
+        }, process.env.JWT); // Authorize user using the secret key
 
 
         const { 
@@ -61,7 +66,7 @@ export const login = async (req, res, next) => {
             username,
             role, 
             ...otherDetails 
-        } = user._doc; // Doing this so that we don't have to send password, isAdmin when logging in to the client
+        } = user._doc; // Bifurcate props 
 
         res.cookie("access_token", token, {
             httpOnly: true
@@ -72,7 +77,7 @@ export const login = async (req, res, next) => {
             lastName,
             username,
             role
-        });
+        }); // Return cookie with JWT 
 
     } catch(err) {
         next(err);

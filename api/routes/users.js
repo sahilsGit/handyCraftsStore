@@ -9,16 +9,16 @@ import {
     verifyUser
 } from "../utils/verifyToken.js";
 
-// Create a router for handling requests
+// Create router for handling requests
 const router = express.Router();
 
-// UPDATE
+// UPDATE req.
 router.put("/:id", verifyUser, updateUser)
 
-// DELETE
+// DELETE req.
 router.delete("/:id", verifyUser, deleteUser)
 
-// GET 
+// GET req.
 router.get("/:id", verifyUser, getUser)
 
 

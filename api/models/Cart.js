@@ -3,14 +3,14 @@ import mongoose from "mongoose";
 const cartSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   items: [
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
         required: true,
       },
       quantity: {
@@ -22,6 +22,6 @@ const cartSchema = new mongoose.Schema({
   ],
 });
 
-const Cart = mongoose.model('Cart', cartSchema);
+const Cart = mongoose.model("Cart", cartSchema);
 
-export default Cart
+export default Cart;
