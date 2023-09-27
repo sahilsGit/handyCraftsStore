@@ -2,3 +2,17 @@
   color: white;
   padding: 10px;
 }
+
+.register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.registrationForm {
+  display: flex;
+  flex-direction: column;
+}
